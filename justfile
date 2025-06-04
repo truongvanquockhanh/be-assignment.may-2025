@@ -21,7 +21,7 @@ migrate:
   alembic upgrade head
 
 # Run tests
-test: 
+test:
   docker-compose up -d test-db
   source .env.test
   alembic upgrade head
