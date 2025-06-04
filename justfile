@@ -23,7 +23,7 @@ migrate:
 # Run tests
 test:
   docker-compose up -d test-db
-  source .env.test
+  . .env.test
   alembic upgrade head
   PYTHONPATH=. pytest tests/test_messages.py
   PYTHONPATH=. pytest tests/test_users.py
