@@ -1,8 +1,10 @@
 # Pydantic models
-from typing import Optional, List
-from uuid import UUID
 from datetime import datetime
+from typing import List, Optional
+from uuid import UUID
+
 from pydantic import BaseModel
+
 
 class UserCreate(BaseModel):
     email: str
@@ -21,10 +23,12 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 class LoginResponse(BaseModel):
     id: UUID
     email: str
     token: str
+
 
 class MessageCreate(BaseModel):
     subject: Optional[str] = None
@@ -42,6 +46,7 @@ class MessageResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 class MessageRecipientResponse(BaseModel):
     id: UUID
     message_id: UUID
@@ -51,6 +56,7 @@ class MessageRecipientResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class InboxMessageResponse(BaseModel):
     id: UUID
@@ -64,6 +70,7 @@ class InboxMessageResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 class RecipientInfo(BaseModel):
     recipient_id: UUID
     read: bool
@@ -71,6 +78,7 @@ class RecipientInfo(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class SentMessageResponse(BaseModel):
     id: UUID

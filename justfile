@@ -1,7 +1,5 @@
 # Justfile for Messaging API Backend Assignment
 
-CURRENT*TIMESTAMP:=`date +'%Y%m%d*%H:%M:%S'`
-
 # Install Python dependencies
 
 install:
@@ -15,17 +13,12 @@ uvicorn app.main:app --reload
 # Start services using Docker Compose
 
 up:
-docker-compose up -d
+docker-compose up db web
 
 # Stop services
 
 down:
 docker-compose down
-
-# make migrations
-
-make-migrate:
-alembic revision --autogenerate -m "${CURRENT_TIMESTAMP} migration"
 
 # Run database migrations (if using Alembic)
 
@@ -35,7 +28,12 @@ alembic upgrade head
 # Run tests
 
 test:
-pytest
+docker-compose up -d test-db
+source .env.test
+alembic upgrade head
+PYTHONPATH=. pytest tests/test_messages.py
+PYTHONPATH=. pytest tests/test_users.py
+docker-compose down
 
 # Format code using black and isort
 
