@@ -22,7 +22,9 @@ migrate:
 
 # Run tests
 test:
-  export $(grep -v '^#' .env.test | xargs)
+  set -a
+  . .env.test
+  set +a
   docker-compose up -d test-db
   alembic upgrade head
   PYTHONPATH=. pytest tests/test_messages.py
