@@ -19,17 +19,17 @@ down:
 migrate: 
   alembic upgrade head
   
+test-db:
+  source .env.test
+  echo $DB_USER
+
 # Run tests
 test:
   docker-compose up -d test-db
-  until pg_isready -h localhost -p 5433 -U "testuser" -d "testdb"; do
-    echo "Waiting for testdb to be ready..."
-    sleep 1
-  done
-  source .env.test
-  alembic upgrade head 
-  PYTHONPATH=. pytest tests/test_messages.py
-  PYTHONPATH=. pytest tests/test_users.py
+  until pg_isready -h localhost -p 5433 -U testuser -d testdb; do echo "Waiting for testdb to be ready..."; sleep 1; done
+  source .env.test && alembic upgrade head
+  source .env.test && PYTHONPATH=. pytest tests/test_messages.py
+  source .env.test && PYTHONPATH=. pytest tests/test_users.py
   docker-compose down
 
 # Format code using black and isort

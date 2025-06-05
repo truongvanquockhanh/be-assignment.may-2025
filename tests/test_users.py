@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.main import app
 
+
 @pytest.mark.asyncio
 async def test_user_api_flow():
     transport = ASGITransport(app=app)
