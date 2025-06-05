@@ -22,6 +22,7 @@ migrate:
 # Run tests
 test:
   docker-compose up -d test-db
+  until pg_isready -h localhost -p 5432; do echo "Waiting for DB..."; sleep 1; done
   source .env.test
   alembic upgrade head
   PYTHONPATH=. pytest tests/test_messages.py

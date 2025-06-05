@@ -1,5 +1,5 @@
 # Docker Compose to run app + PostgreSQL
-version: '3.8'
+version: '2.4'
 
 services:
   db:
@@ -14,6 +14,11 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   test-db:
     image: postgres:15
@@ -29,7 +34,8 @@ services:
     build: .
     container_name: fastapi-app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "${APP_PORT}:8000"
     environment:

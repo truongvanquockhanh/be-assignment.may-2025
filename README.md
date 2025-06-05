@@ -200,6 +200,11 @@ just down
 ## Testing
 
 Run tests with:
+* Make sure pg_isready is installed (comes with PostgreSQL client tools). Because in test me use
+```bash
+until pg_isready -h localhost -p 5432; do echo "Waiting for DB..."; sleep 1; done
+```
+for wait db setup done when run alembic
 
 ```bash
 just test
