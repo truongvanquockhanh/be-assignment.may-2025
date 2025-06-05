@@ -1,27 +1,10 @@
 # Test user-related functionality
 import pytest
-from dotenv import load_dotenv
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.db import get_db
 from app.main import app
-
-# # Test DB URL (make sure test DB credentials are correct and test DB exists)
-# TEST_DATABASE_URL = "postgresql+asyncpg://testuser:testpass@localhost:5433/testdb"
-
-# # Create test async engine and sessionmaker
-# engine_test = create_async_engine(TEST_DATABASE_URL, echo=True)
-# AsyncSessionTest = sessionmaker(bind=engine_test, class_=AsyncSession, expire_on_commit=False)
-
-# # Override get_db dependency to use test DB session
-# async def override_get_db():
-#     async with AsyncSessionTest() as session:
-#         yield session
-
-# app.dependency_overrides[get_db] = override_get_db
-
 
 @pytest.mark.asyncio
 async def test_user_api_flow():

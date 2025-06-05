@@ -1,5 +1,4 @@
 # Justfile for Messaging API Backend Assignment
-
 # Install Python dependencies
 install: 
   pip install -r requirements.txt
@@ -22,10 +21,8 @@ migrate:
 
 # Run tests
 test:
-  set -a
-  . .env.test
-  set +a
   docker-compose up -d test-db
+  source .env.test
   alembic upgrade head
   PYTHONPATH=. pytest tests/test_messages.py
   PYTHONPATH=. pytest tests/test_users.py

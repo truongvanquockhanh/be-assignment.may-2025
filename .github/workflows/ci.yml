@@ -6,6 +6,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+
+    env:
+      DB_USER: testuser
+      DB_PASSWORD: testpass
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: testdb
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -19,15 +36,12 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-      
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.1/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose version
 
       - name: Install dependencies
         run: just install
 
       - name: Run tests
-        run: just test
+        run: |
+          alembic upgrade head
+          PYTHONPATH=. pytest tests/test_messages.py
+          PYTHONPATH=. pytest tests/test_users.py
