@@ -18,13 +18,16 @@ down:
 # Run database migrations (if using Alembic)
 migrate: 
   alembic upgrade head
-
+  
 # Run tests
 test:
   docker-compose up -d test-db
-  until pg_isready -h localhost -p 5432; do echo "Waiting for DB..."; sleep 1; done
+  until pg_isready -h localhost -p 5433 -U "testuser" -d "testdb"; do
+    echo "Waiting for testdb to be ready..."
+    sleep 1
+  done
   source .env.test
-  alembic upgrade head
+  alembic upgrade head 
   PYTHONPATH=. pytest tests/test_messages.py
   PYTHONPATH=. pytest tests/test_users.py
   docker-compose down
